@@ -19,3 +19,17 @@ function inconsistentRead(filename, callback) {
 
 // This is hard to manage downstream as depending on this method becomes
 // a case of managing 2 states of sync and async
+
+// A syncronous way of writing this is (no need for callback)
+
+function syncronousRead(filename) {
+  if (cache[filename]) {
+    return cache[filename]
+  } else {
+    // async
+    fs.readFile(filename, "utf8", (err, data) => {
+      cache[filename] = fs.readFileSync(filename, 'utf8');
+      return cache[filename];
+    });
+  }
+}

@@ -6,7 +6,8 @@ function add(a, b) {
   return a + b;
 }
 
-// This written as a syncronous continuation passing style is
+// This written as a syncronous continuation passing style is and there
+// is no need to ever write a syncronous function like this, only use direct style
 
 function add(a, b, callback) {
   callback(a + b);
