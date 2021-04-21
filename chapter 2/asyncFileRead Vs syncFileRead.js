@@ -33,3 +33,33 @@ function syncronousRead(filename) {
     });
   }
 }
+
+// Using syncronous I/O is blocking and discouraged in most cases, however here it is
+// kinda okay if the use case is something like bootstrapping
+
+// if it will block the thread for concurrent requests though, it's bad
+
+// Here is an async version
+
+// The top part looking for a cached file is now async as it's directed to pass the syncronous
+// callback to the next tick of the event loop.
+
+
+// process.nextTick add the callback to the top of the event queue above all other I/O's
+
+// if this is used in a recursive function, the event loop is starved of all other events
+
+// in this case it is best to use setImmediate();
+
+function asyncRead(filename, callback) {
+  if (cache[filename]) {
+    process.nextTick(function() {
+      callback(cache[filename])
+    })
+  } else {
+    fs.readFile(filename, "utf8", (err, data) => {
+      cache[filename] = data;
+      callback(data);
+    });
+  }
+}
